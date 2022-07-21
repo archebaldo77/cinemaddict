@@ -5,11 +5,15 @@
   "description": "Проект «Киноман» от HTML Academy",
   "scripts": {
     "eslint": "eslint src/",
-    "test": "npm run eslint"
+    "test": "npm run eslint",
+    "prepare": "husky install"
   },
   "devDependencies": {
     "eslint": "7.13.0",
-    "eslint-config-htmlacademy": "3.0.0"
+    "eslint-config-htmlacademy": "3.0.0",
+    "eslint-config-prettier": "8.5.0",
+    "husky": "^8.0.0",
+    "prettier": "2.7.1"
   },
   "engines": {
     "node": "10"

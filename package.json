@@ -22,5 +22,9 @@
   },
   "engines": {
     "node": "10"
+  },
+  "dependencies": {
+    "dayjs": "1.11.4",
+    "nanoid": "4.0.0"
   }
 }

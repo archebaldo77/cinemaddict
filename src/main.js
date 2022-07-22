@@ -8,7 +8,14 @@ import { createShowMoreTemplate } from './views/show-more';
 import { createFooterStatisticsTemplate } from './views/footer-statistics';
 import { createFilmDetailsTemplate } from './views/film-details';
 
-const FILMS_COUNT = 5;
+import { generateFilm } from './mocks/generate-film';
+import { generateComment } from './mocks/generate-comment';
+
+const FILMS_COUNT = 20;
+const COMMENTS_COUNT = 3;
+
+const films = new Array(FILMS_COUNT).fill().map(generateFilm);
+const comments = new Array(COMMENTS_COUNT).fill().map(generateComment);
 
 const render = (container, template, where = `beforeend`) => {
   container.insertAdjacentHTML(where, template);
@@ -32,12 +39,12 @@ const filmsContainerElement = filmsElement.querySelector(
   `.films-list__container`
 );
 
-for (let i = 0; i < FILMS_COUNT; i++) {
-  render(filmsContainerElement, createFilmCardTemplate());
-}
+films.forEach((film) =>
+  render(filmsContainerElement, createFilmCardTemplate(film, comments))
+);
 
 render(filmsListElement, createShowMoreTemplate());
 render(footerElement, createFooterStatisticsTemplate(FILMS_COUNT));
 
 document.body.classList.add(`hide-overflow`);
-render(document.body, createFilmDetailsTemplate());
+render(document.body, createFilmDetailsTemplate(films[0], comments));

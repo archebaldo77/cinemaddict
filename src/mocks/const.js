@@ -100,8 +100,6 @@ export const DESCRIPTIONS = [
   `In rutrum ac purus sit amet tempus.`,
 ];
 
-export const EMOTIONS = [`smile`, `sleeping`, `puke`, `angry`];
-
 export const AUTHORS = [
   `Laurie Faria Stolarz`,
   `Leonore Derichs`,

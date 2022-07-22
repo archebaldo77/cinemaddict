@@ -1,6 +1,8 @@
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 
+import { UserRank } from './const';
+
 dayjs.extend(duration);
 
 export const getRandomInt = (min = 0, max = 1) => {
@@ -47,4 +49,16 @@ export const getFilmYear = (date) => {
 
 export const getCommentDate = (date) => {
   return dayjs(date).format(`YYYY/MM/DD HH:MM`);
+};
+
+export const getUserRank = (filmsCount) => {
+  if (filmsCount === 0) {
+    return ``;
+  } else if (filmsCount >= 1 && filmsCount <= 10) {
+    return UserRank.NOVICE;
+  } else if (filmsCount >= 11 && filmsCount <= 20) {
+    return UserRank.FAN;
+  } else {
+    return UserRank.MOVIE_BUFF;
+  }
 };

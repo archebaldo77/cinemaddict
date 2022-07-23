@@ -9,3 +9,5 @@ env:
 extends:
   - 'htmlacademy/vanilla'
   - 'prettier'
+
+parser: '@babel/eslint-parser'

@@ -1,4 +1,4 @@
-import { getUserRank } from '../helpers/common';
+import { getUserRank } from '../../../helpers/common';
 
 export const createUserRankTemplate = (filmsCount) => {
   return `

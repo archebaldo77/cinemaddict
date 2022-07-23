@@ -1,4 +1,4 @@
-import { Filter } from '../helpers/const';
+import { Filter } from '../../../helpers/const';
 
 export const createNavigationTemplate = (films) => {
   return `

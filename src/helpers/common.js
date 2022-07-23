@@ -62,3 +62,10 @@ export const getUserRank = (filmsCount) => {
     return UserRank.MOVIE_BUFF;
   }
 };
+
+export const createElement = (template) => {
+  const div = document.createElement(`div`);
+  div.innerHTML = template;
+
+  return div.firstElementChild;
+};

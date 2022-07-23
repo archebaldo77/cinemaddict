@@ -29,6 +29,37 @@ const render = (container, template, where = `beforeend`) => {
   container.insertAdjacentElement(where, template);
 };
 
+const renderFilm = (film, comments) => {
+  const filmCard = new FilmCardView(film, comments);
+
+  const titleElement = filmCard.element.querySelector(`.film-card__title`);
+  const posterElement = filmCard.element.querySelector(`.film-card__poster`);
+  const commentsElement =
+    filmCard.element.querySelector(`.film-card__comments`);
+
+  [titleElement, posterElement, commentsElement].forEach((el) =>
+    el.addEventListener(`click`, (evt) => {
+      evt.preventDefault();
+
+      const filmDetails = new FilmDetailsView(film, comments);
+      const closeButton = filmDetails.element.querySelector(
+        `.film-details__close-btn`
+      );
+
+      closeButton.addEventListener(`click`, () => {
+        document.body.removeChild(filmDetails.element);
+        document.body.classList.remove(`hide-overflow`);
+        filmDetails.removeElement();
+      });
+
+      document.body.appendChild(filmDetails.element);
+      document.body.classList.add(`hide-overflow`);
+    })
+  );
+
+  render(filmsContainerElement, filmCard.element);
+};
+
 const headerElement = document.querySelector(`header`);
 const mainElement = document.querySelector(`main`);
 const footerElement = document.querySelector(`footer`);
@@ -49,9 +80,7 @@ const filmsContainerElement = filmsElement.querySelector(
 
 films
   .slice(0, FILMS_COUNT_ON_START)
-  .forEach((film) =>
-    render(filmsContainerElement, new FilmCardView(film, comments).element)
-  );
+  .forEach((film) => renderFilm(film, comments));
 
 if (films.length > FILMS_COUNT_ON_START) {
   const showMoreButtonElement = new ShowMoreButtonView().element;
@@ -61,9 +90,7 @@ if (films.length > FILMS_COUNT_ON_START) {
   showMoreButtonElement.addEventListener(`click`, () => {
     films
       .slice(renderedFilms, renderedFilms + FILMS_COUNT_BY_CLICK)
-      .forEach((film) =>
-        render(filmsContainerElement, new FilmCardView(film, comments).element)
-      );
+      .forEach((film) => renderFilm(film, comments));
 
     renderedFilms += FILMS_COUNT_BY_CLICK;
 
@@ -75,6 +102,3 @@ if (films.length > FILMS_COUNT_ON_START) {
 }
 
 render(footerElement, new FooterStatisticsView(FILMS_COUNT).element);
-
-document.body.classList.add(`hide-overflow`);
-render(document.body, new FilmDetailsView(films[0], comments).element);

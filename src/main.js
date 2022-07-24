@@ -9,7 +9,7 @@ import ShowMoreButtonView from './views/show-more-button-view/show-more-button-v
 import FooterStatisticsView from './views/footer-statistics-view/footer-statistics-view';
 import FilmDetailsView from './views/film-details-view/film-details-view';
 
-import { render } from './helpers/render';
+import { render, remove } from './helpers/render';
 
 import { generateFilm } from './mocks/generate-film';
 import { generateComment } from './mocks/generate-comment';
@@ -73,14 +73,14 @@ const headerElement = document.querySelector(`header`);
 const mainElement = document.querySelector(`main`);
 const footerElement = document.querySelector(`footer`);
 
-render(headerElement, new UserRankView(alreadyWatchedFilms).element);
-render(mainElement, new NavigationView(films).element);
-render(mainElement, new SortView().element);
-render(mainElement, new FilmsView().element);
+render(headerElement, new UserRankView(alreadyWatchedFilms));
+render(mainElement, new NavigationView(films));
+render(mainElement, new SortView());
+render(mainElement, new FilmsView());
 
 const filmsElement = mainElement.querySelector(`.films`);
 
-render(filmsElement, new FilmsListView().element);
+render(filmsElement, new FilmsListView());
 
 const filmsListElement = filmsElement.querySelector(`.films-list`);
 const filmsContainerElement = filmsElement.querySelector(
@@ -88,18 +88,18 @@ const filmsContainerElement = filmsElement.querySelector(
 );
 
 if (films.length === 0) {
-  render(filmsListElement, new NoFilmsView().element);
+  render(filmsListElement, new NoFilmsView());
 } else {
   films
     .slice(0, FILMS_COUNT_ON_START)
     .forEach((film) => renderFilm(film, comments));
 
   if (films.length > FILMS_COUNT_ON_START) {
-    const showMoreButtonElement = new ShowMoreButtonView().element;
+    const showMoreButton = new ShowMoreButtonView();
 
-    render(filmsListElement, showMoreButtonElement);
+    render(filmsListElement, showMoreButton);
 
-    showMoreButtonElement.addEventListener(`click`, () => {
+    showMoreButton.element.addEventListener(`click`, () => {
       films
         .slice(renderedFilms, renderedFilms + FILMS_COUNT_BY_CLICK)
         .forEach((film) => renderFilm(film, comments));
@@ -107,11 +107,10 @@ if (films.length === 0) {
       renderedFilms += FILMS_COUNT_BY_CLICK;
 
       if (renderedFilms >= films.length) {
-        showMoreButtonElement.remove();
-        showMoreButtonElement.removeElement();
+        remove(showMoreButton);
       }
     });
   }
 }
 
-render(footerElement, new FooterStatisticsView(FILMS_COUNT).element);
+render(footerElement, new FooterStatisticsView(FILMS_COUNT));

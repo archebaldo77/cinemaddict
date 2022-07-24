@@ -1,23 +1,13 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createShowMoreButtonTemplate } from './templates/create-show-more-button-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class ShowMoreButtonView {
-  #element = null;
-
-  get #template() {
+export default class ShowMoreButtonView extends AbstractClassView {
+  get _template() {
     return createShowMoreButtonTemplate();
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
+  setClickHandler(cb) {
+    this.element.addEventListener(`click`, cb);
   }
 }

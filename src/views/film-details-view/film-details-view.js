@@ -1,32 +1,25 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createFilmDetailsTemplate } from './templates/create-film-details-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class FilmDetailsView {
-  #element;
+export default class FilmDetailsView extends AbstractClassView {
   #film;
   #comments;
 
   constructor(film, comments) {
-    this.#element = null;
+    super();
 
     this.#film = film;
     this.#comments = comments;
   }
 
-  get #template() {
+  get _template() {
     return createFilmDetailsTemplate(this.#film, this.#comments);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
+  setCloseClickHandler(cb) {
+    this.element
+      .querySelector(`.film-details__close-btn`)
+      .addEventListener(`click`, cb);
   }
 }

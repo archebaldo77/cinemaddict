@@ -1,30 +1,17 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createFooterStatisticsTemplate } from './templates/create-footer-statistics-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class FooterStatisticsView {
-  #element;
+export default class FooterStatisticsView extends AbstractClassView {
   #count;
 
   constructor(count) {
-    this.#element = null;
+    super();
 
     this.#count = count;
   }
 
-  get #template() {
+  get _template() {
     return createFooterStatisticsTemplate(this.#count);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

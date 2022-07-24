@@ -1,32 +1,32 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createFilmCardTemplate } from './templates/create-film-card-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class FilmCardView {
-  #element;
+export default class FilmCardView extends AbstractClassView {
   #film;
   #comments;
 
   constructor(film, comments) {
-    this.#element = null;
+    super();
 
     this.#film = film;
     this.#comments = comments;
   }
 
-  get #template() {
+  get _template() {
     return createFilmCardTemplate(this.#film, this.#comments);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
+  setFilmDetailsOpenClickHandler(cb) {
+    const titleElement = this.element.querySelector(`.film-card__title`);
+    const posterElement = this.element.querySelector(`.film-card__poster`);
+    const commentsElement = this.element.querySelector(`.film-card__comments`);
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
+    [titleElement, posterElement, commentsElement].forEach((el) =>
+      el.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        cb();
+      })
+    );
   }
 }

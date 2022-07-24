@@ -1,30 +1,17 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createUserRankTemplate } from './templates/create-user-rank-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class UserRankView {
-  #element;
+export default class UserRankView extends AbstractClassView {
   #count;
 
   constructor(count) {
-    this.#element = null;
+    super();
 
     this.#count = count;
   }
 
-  get #template() {
+  get _template() {
     return createUserRankTemplate(this.#count);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

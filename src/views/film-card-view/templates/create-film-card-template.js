@@ -1,6 +1,6 @@
 import { createUserControls } from './create-user-controls-template';
 
-import { getFilmDuration, getFilmYear } from '../../../helpers/common';
+import { getFilmDuration, getFilmYear } from '../../../helpers/date';
 
 export const createFilmCardTemplate = (film, comments) => {
   const {

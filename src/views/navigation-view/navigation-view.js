@@ -1,30 +1,17 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createNavigationTemplate } from './templates/create-navigation-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class NavigationView {
-  #element;
+export default class NavigationView extends AbstractClassView {
   #films;
 
   constructor(films) {
-    this.#element = null;
+    super();
 
     this.#films = films;
   }
 
-  get #template() {
+  get _template() {
     return createNavigationTemplate(this.#films);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

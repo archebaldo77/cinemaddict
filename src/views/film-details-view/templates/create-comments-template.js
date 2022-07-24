@@ -1,4 +1,4 @@
-import { getCommentDate } from '../../../helpers/common';
+import { getCommentDate } from '../../../helpers/date';
 
 export const createCommentsTemplate = (comments) => {
   return `

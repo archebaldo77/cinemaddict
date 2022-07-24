@@ -1,23 +1,9 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createSortTemplate } from './templates/create-sort-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class SortView {
-  #element = null;
-
-  get #template() {
+export default class SortView extends AbstractClassView {
+  get _template() {
     return createSortTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

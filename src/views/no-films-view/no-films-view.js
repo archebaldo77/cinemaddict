@@ -1,23 +1,9 @@
+import AbstractClassView from '../abstract-class-view/abstract-class-view';
+
 import { createNoFilmsTemplate } from './templates/create-no-films-template';
 
-import { createElement } from '../../helpers/common';
-
-export default class NoFilmsView {
-  #element = null;
-
-  get #template() {
+export default class NoFilmsView extends AbstractClassView {
+  get _template() {
     return createNoFilmsTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.#template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

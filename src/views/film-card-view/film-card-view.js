@@ -16,4 +16,17 @@ export default class FilmCardView extends AbstractClassView {
   get _template() {
     return createFilmCardTemplate(this.#film, this.#comments);
   }
+
+  setFilmDetailsOpenClickHandler(cb) {
+    const titleElement = this.element.querySelector(`.film-card__title`);
+    const posterElement = this.element.querySelector(`.film-card__poster`);
+    const commentsElement = this.element.querySelector(`.film-card__comments`);
+
+    [titleElement, posterElement, commentsElement].forEach((el) =>
+      el.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        cb();
+      })
+    );
+  }
 }

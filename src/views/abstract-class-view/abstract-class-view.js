@@ -1,4 +1,4 @@
-import { createElement } from '../../helpers/common';
+import { createElement } from '../../helpers/render';
 
 export default class AbstractClassView {
   #element;

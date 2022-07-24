@@ -9,6 +9,8 @@ import ShowMoreButtonView from './views/show-more-button-view/show-more-button-v
 import FooterStatisticsView from './views/footer-statistics-view/footer-statistics-view';
 import FilmDetailsView from './views/film-details-view/film-details-view';
 
+import { render } from './helpers/render';
+
 import { generateFilm } from './mocks/generate-film';
 import { generateComment } from './mocks/generate-comment';
 
@@ -25,10 +27,6 @@ const comments = new Array(COMMENTS_COUNT).fill().map(generateComment);
 const alreadyWatchedFilms = films.filter(
   (film) => film.userDetails.alreadyWatched
 ).length;
-
-const render = (container, template, where = `beforeend`) => {
-  container.insertAdjacentElement(where, template);
-};
 
 const renderFilm = (film, comments) => {
   const filmCard = new FilmCardView(film, comments);

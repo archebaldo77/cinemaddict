@@ -13,3 +13,10 @@ export const Filter = {
     films.filter((film) => film.userDetails.alreadyWatched).length,
   Favorite: (films) => films.filter((film) => film.userDetails.favorite).length,
 };
+
+export const RenderPosition = {
+  BEFOREBEGIN: 'beforebegin',
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+  AFTEREND: 'afterend',
+};

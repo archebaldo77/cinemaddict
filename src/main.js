@@ -31,40 +31,28 @@ const alreadyWatchedFilms = films.filter(
 const renderFilm = (film, comments) => {
   const filmCard = new FilmCardView(film, comments);
 
-  const titleElement = filmCard.element.querySelector(`.film-card__title`);
-  const posterElement = filmCard.element.querySelector(`.film-card__poster`);
-  const commentsElement =
-    filmCard.element.querySelector(`.film-card__comments`);
+  filmCard.setFilmDetailsOpenClickHandler(() => {
+    const filmDetails = new FilmDetailsView(film, comments);
 
-  [titleElement, posterElement, commentsElement].forEach((el) =>
-    el.addEventListener(`click`, (evt) => {
-      evt.preventDefault();
+    const onFilmDetailsClose = () => {
+      document.body.removeChild(filmDetails.element);
+      document.body.classList.remove(`hide-overflow`);
+      document.removeEventListener(`keydown`, onEscKeyDown);
+      filmDetails.removeElement();
+    };
 
-      const filmDetails = new FilmDetailsView(film, comments);
-      const closeButton = filmDetails.element.querySelector(
-        `.film-details__close-btn`
-      );
+    const onEscKeyDown = (evt) => {
+      if (evt.key === `Escape` || evt.key === `Esc`) {
+        onFilmDetailsClose();
+      }
+    };
 
-      const onFilmDetailsClose = () => {
-        document.body.removeChild(filmDetails.element);
-        document.body.classList.remove(`hide-overflow`);
-        document.removeEventListener(`keydown`, onEscKeyDown);
-        filmDetails.removeElement();
-      };
+    filmDetails.setCloseClickHandler(onFilmDetailsClose);
 
-      const onEscKeyDown = (evt) => {
-        if (evt.key === `Escape`) {
-          onFilmDetailsClose();
-        }
-      };
-
-      closeButton.addEventListener(`click`, onFilmDetailsClose);
-
-      document.body.appendChild(filmDetails.element);
-      document.body.classList.add(`hide-overflow`);
-      document.addEventListener(`keydown`, onEscKeyDown);
-    })
-  );
+    document.body.appendChild(filmDetails.element);
+    document.body.classList.add(`hide-overflow`);
+    document.addEventListener(`keydown`, onEscKeyDown);
+  });
 
   render(filmsContainerElement, filmCard.element);
 };
@@ -96,10 +84,11 @@ if (films.length === 0) {
 
   if (films.length > FILMS_COUNT_ON_START) {
     const showMoreButton = new ShowMoreButtonView();
+    showMoreButton.setClickHandler(() => {});
 
     render(filmsListElement, showMoreButton);
 
-    showMoreButton.element.addEventListener(`click`, () => {
+    showMoreButton.setClickHandler(() => {
       films
         .slice(renderedFilms, renderedFilms + FILMS_COUNT_BY_CLICK)
         .forEach((film) => renderFilm(film, comments));

@@ -3,6 +3,7 @@ import NavigationView from './views/navigation-view/navigation-view';
 import SortView from './views/sort-view/sort-view';
 import FilmsView from './views/films-view/films-view';
 import FilmsListView from './views/films-list-view/films-list-view';
+import NoFilmsView from './views/no-films-view/no-films-view';
 import FilmCardView from './views/film-card-view/film-card-view';
 import ShowMoreButtonView from './views/show-more-button-view/show-more-button-view';
 import FooterStatisticsView from './views/footer-statistics-view/footer-statistics-view';
@@ -46,14 +47,24 @@ const renderFilm = (film, comments) => {
         `.film-details__close-btn`
       );
 
-      closeButton.addEventListener(`click`, () => {
+      const onFilmDetailsClose = () => {
         document.body.removeChild(filmDetails.element);
         document.body.classList.remove(`hide-overflow`);
+        document.removeEventListener(`keydown`, onEscKeyDown);
         filmDetails.removeElement();
-      });
+      };
+
+      const onEscKeyDown = (evt) => {
+        if (evt.key === `Escape`) {
+          onFilmDetailsClose();
+        }
+      };
+
+      closeButton.addEventListener(`click`, onFilmDetailsClose);
 
       document.body.appendChild(filmDetails.element);
       document.body.classList.add(`hide-overflow`);
+      document.addEventListener(`keydown`, onEscKeyDown);
     })
   );
 
@@ -78,27 +89,31 @@ const filmsContainerElement = filmsElement.querySelector(
   `.films-list__container`
 );
 
-films
-  .slice(0, FILMS_COUNT_ON_START)
-  .forEach((film) => renderFilm(film, comments));
+if (films.length === 0) {
+  render(filmsListElement, new NoFilmsView().element);
+} else {
+  films
+    .slice(0, FILMS_COUNT_ON_START)
+    .forEach((film) => renderFilm(film, comments));
 
-if (films.length > FILMS_COUNT_ON_START) {
-  const showMoreButtonElement = new ShowMoreButtonView().element;
+  if (films.length > FILMS_COUNT_ON_START) {
+    const showMoreButtonElement = new ShowMoreButtonView().element;
 
-  render(filmsListElement, showMoreButtonElement);
+    render(filmsListElement, showMoreButtonElement);
 
-  showMoreButtonElement.addEventListener(`click`, () => {
-    films
-      .slice(renderedFilms, renderedFilms + FILMS_COUNT_BY_CLICK)
-      .forEach((film) => renderFilm(film, comments));
+    showMoreButtonElement.addEventListener(`click`, () => {
+      films
+        .slice(renderedFilms, renderedFilms + FILMS_COUNT_BY_CLICK)
+        .forEach((film) => renderFilm(film, comments));
 
-    renderedFilms += FILMS_COUNT_BY_CLICK;
+      renderedFilms += FILMS_COUNT_BY_CLICK;
 
-    if (renderedFilms >= films.length) {
-      showMoreButtonElement.remove();
-      showMoreButtonElement.removeElement();
-    }
-  });
+      if (renderedFilms >= films.length) {
+        showMoreButtonElement.remove();
+        showMoreButtonElement.removeElement();
+      }
+    });
+  }
 }
 
 render(footerElement, new FooterStatisticsView(FILMS_COUNT).element);

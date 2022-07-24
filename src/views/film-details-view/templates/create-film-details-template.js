@@ -3,7 +3,7 @@ import { createUserControlsTemplate } from './create-user-controls-template';
 import { createCommentsTemplate } from './create-comments-template';
 import { createEmojiListTemplate } from './create-emoji-list-template';
 
-import { getFilmReleaseDate, getFilmDuration } from '../../../helpers/common';
+import { getFilmReleaseDate, getFilmDuration } from '../../../helpers/date';
 
 export const createFilmDetailsTemplate = (film, comments) => {
   const {

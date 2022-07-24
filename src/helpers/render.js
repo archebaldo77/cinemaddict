@@ -30,6 +30,6 @@ export const remove = (component) => {
     throw new Error(`Can remove only components`);
   }
 
-  component.element.removeElement();
   component.element.remove();
+  component.removeElement();
 };

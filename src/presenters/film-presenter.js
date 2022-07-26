@@ -43,6 +43,25 @@ export default class FilmPresenter {
     render(this.#container, this.#filmCardView);
   }
 
+  update(updatedFilm, comments) {
+    this.#film = updatedFilm;
+    this.#comments = comments;
+
+    const prevFilmCardView = this.#filmCardView;
+    this.#filmCardView = new FilmCardView(this.#film, this.#comments);
+
+    this.#filmCardView.setFilmDetailsOpenClickHandler(
+      this.#handleFilmDetailsOpen
+    );
+
+    this.#filmCardView.setControlClickHandler(this.#handleControlChange);
+    const parentElement = prevFilmCardView.element.parentElement;
+    parentElement.replaceChild(
+      this.#filmCardView.element,
+      prevFilmCardView.element
+    );
+  }
+
   #handleFilmDetailsOpen = () => {
     this.#filmDetailsView = new FilmDetailsView(this.#film, this.#comments);
     this.#filmDetailsView.setCloseClickHandler(this.#handleFilmDetailsClose);

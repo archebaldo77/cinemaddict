@@ -29,4 +29,16 @@ export default class FilmCardView extends AbstractClassView {
       })
     );
   }
+
+  setControlClickHandler(cb) {
+    this.element
+      .querySelector(`.film-card__controls`)
+      .addEventListener(`click`, (evt) => {
+        if (evt.target.tagName !== `BUTTON`) {
+          return;
+        }
+
+        cb(evt.target.dataset.controlType);
+      });
+  }
 }

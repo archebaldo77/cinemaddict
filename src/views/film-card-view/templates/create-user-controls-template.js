@@ -13,8 +13,38 @@ export const createUserControls = (userDetails) => {
 
   return `
     <div class="film-card__controls">
-      <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist ${watchlistActiveClass}" type="button">Add to watchlist</button>
-      <button class="film-card__controls-item button film-card__controls-item--mark-as-watched ${alreadyWatchedActiveClass}" type="button">Mark as watched</button>
-      <button class="film-card__controls-item button film-card__controls-item--favorite ${favoriteActiveClass}" type="button">Mark as favorite</button>
+      <button
+        class="
+          button
+          film-card__controls-item
+          film-card__controls-item--add-to-watchlist
+          ${watchlistActiveClass}"
+        type="button"
+        data-control-type="watchlist"
+        >
+          Add to watchlist
+        </button>
+      <button
+        class="
+          button
+          film-card__controls-item
+          film-card__controls-item--mark-as-watched
+          ${alreadyWatchedActiveClass}"
+        type="button"
+        data-control-type="alreadyWatched"
+      >
+        Mark as watched
+      </button>
+      <button
+        class="
+          button
+          film-card__controls-item
+          film-card__controls-item--favorite
+          ${favoriteActiveClass}"
+        type="button"
+        data-control-type="favorite"
+      >
+        Mark as favorite
+      </button>
     </div>`;
 };

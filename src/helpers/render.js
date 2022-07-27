@@ -33,3 +33,26 @@ export const remove = (component) => {
   component.element.remove();
   component.removeElement();
 };
+
+export const replace = (newComponent, oldComponent) => {
+  if (newComponent === null || oldComponent === null) {
+    throw new Error("Can't replace unexisting elements");
+  }
+
+  const newChild =
+    newComponent instanceof AbstractClassView
+      ? newComponent.element
+      : newComponent;
+  const oldChild =
+    oldComponent instanceof AbstractClassView
+      ? oldComponent.element
+      : oldComponent;
+
+  const parent = oldChild.parentElement;
+
+  if (parent === null) {
+    throw new Error("Parent element doesn't exist");
+  }
+
+  parent.replaceChild(newChild, oldChild);
+};

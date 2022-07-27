@@ -1,7 +1,7 @@
 import FilmCardView from '../views/film-card-view/film-card-view';
 import FilmDetailsView from '../views/film-details-view/film-details-view';
 
-import { render, remove } from '../helpers/render';
+import { render, remove, replace } from '../helpers/render';
 
 export default class FilmPresenter {
   #container;
@@ -13,6 +13,7 @@ export default class FilmPresenter {
   #comments;
 
   #handleDataChange;
+  #handleViewChange;
 
   constructor(container) {
     this.#container = container;
@@ -24,21 +25,17 @@ export default class FilmPresenter {
     this.#comments = null;
 
     this.#handleDataChange = null;
+    this.#handleViewChange = null;
   }
 
-  init(film, comments, handleDataChange) {
+  init(film, comments, handleDataChange, handleViewChange) {
     this.#film = film;
     this.#comments = comments;
 
     this.#handleDataChange = handleDataChange;
+    this.#handleViewChange = handleViewChange;
 
-    this.#filmCardView = new FilmCardView(this.#film, this.#comments);
-
-    this.#filmCardView.setFilmDetailsOpenClickHandler(
-      this.#handleFilmDetailsOpen
-    );
-
-    this.#filmCardView.setControlClickHandler(this.#handleControlChange);
+    this.#createFilmCardView(this.#film, this.#comments);
 
     render(this.#container, this.#filmCardView);
   }
@@ -48,34 +45,53 @@ export default class FilmPresenter {
     this.#comments = comments;
 
     const prevFilmCardView = this.#filmCardView;
-    this.#filmCardView = new FilmCardView(this.#film, this.#comments);
+    this.#createFilmCardView(this.#film, this.#comments);
+
+    replace(this.#filmCardView, prevFilmCardView);
+
+    if (this.#filmDetailsView !== null) {
+      const prevFilDetailsView = this.#filmDetailsView;
+      const scrollTop = prevFilDetailsView.element.scrollTop;
+      this.#createFilmDetailsView(this.#film, this.#comments);
+
+      replace(this.#filmDetailsView, prevFilDetailsView);
+      this.#filmDetailsView.element.scrollTop = scrollTop;
+    }
+  }
+
+  chageViewToCard() {
+    this.#handleFilmDetailsClose();
+  }
+
+  #createFilmCardView(film, comments) {
+    this.#filmCardView = new FilmCardView(film, comments);
 
     this.#filmCardView.setFilmDetailsOpenClickHandler(
       this.#handleFilmDetailsOpen
     );
-
     this.#filmCardView.setControlClickHandler(this.#handleControlChange);
-    const parentElement = prevFilmCardView.element.parentElement;
-    parentElement.replaceChild(
-      this.#filmCardView.element,
-      prevFilmCardView.element
-    );
+  }
+
+  #createFilmDetailsView(film, comments) {
+    this.#filmDetailsView = new FilmDetailsView(film, comments);
+
+    this.#filmDetailsView.setCloseClickHandler(this.#handleFilmDetailsClose);
+    this.#filmDetailsView.setControlClickHandler(this.#handleControlChange);
   }
 
   #handleFilmDetailsOpen = () => {
-    this.#filmDetailsView = new FilmDetailsView(this.#film, this.#comments);
-    this.#filmDetailsView.setCloseClickHandler(this.#handleFilmDetailsClose);
+    this.#handleViewChange();
 
-    document.body.appendChild(this.#filmDetailsView.element);
+    this.#createFilmDetailsView(this.#film, this.#comments);
     document.body.classList.add(`hide-overflow`);
     document.addEventListener(`keydown`, this.#handleEscKeyDown);
+    render(document.body, this.#filmDetailsView);
   };
 
   #handleFilmDetailsClose = () => {
-    document.body.removeChild(this.#filmDetailsView.element);
+    remove(this.#filmDetailsView);
     document.body.classList.remove(`hide-overflow`);
     document.removeEventListener(`keydown`, this.#handleEscKeyDown);
-    remove(this.#filmDetailsView);
   };
 
   #handleEscKeyDown = (evt) => {

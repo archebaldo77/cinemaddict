@@ -87,7 +87,12 @@ export default class MainPresenter {
     this.#films.slice(from, to).forEach((film) => {
       const filmPresenter = new FilmPresenter(this.#filmsContainer);
       this.#filmsPresenters.set(film.id, filmPresenter);
-      filmPresenter.init(film, this.#comments, this.#handleDataChange);
+      filmPresenter.init(
+        film,
+        this.#comments,
+        this.#handleDataChange,
+        this.#handleViewChange
+      );
     });
   }
 
@@ -115,5 +120,13 @@ export default class MainPresenter {
 
   #handleDataChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
+
+    this.#filmsPresenters
+      .get(updatedFilm.id)
+      .update(updatedFilm, this.#comments);
+  };
+
+  #handleViewChange = () => {
+    this.#filmsPresenters.forEach((presenter) => presenter.chageViewToCard());
   };
 }

@@ -8,7 +8,9 @@ import NoFilmsView from '../views/no-films-view/no-films-view';
 import ShowMoreButtonView from '../views/show-more-button-view/show-more-button-view';
 
 import { render, remove } from '../helpers/render';
-import { updateItem } from '../helpers/common';
+import { updateItem, getFilmsBySortType } from '../helpers/common';
+
+import { SortType } from '../helpers/const';
 
 const FILMS_COUNT_ON_START = 5;
 const FILMS_COUNT_BY_CLICK = 5;
@@ -27,17 +29,22 @@ export default class MainPresenter {
   #showMoreButtonView;
 
   #renderedFilms;
+  #currentSortType;
 
   #films;
   #comments;
+
+  #sortedFilms;
 
   constructor(container) {
     this.#container = container;
 
     this.#filmsPresenters = new Map();
 
+    this.#currentSortType = SortType.DEFAULT.type;
+
     this.#navigationView = null;
-    this.#sortView = new SortView();
+    this.#sortView = new SortView(this.#currentSortType);
     this.#filmsView = new FilmsView();
     this.#filmsListView = new FilmsListView();
 
@@ -52,6 +59,8 @@ export default class MainPresenter {
 
     this.#films = null;
     this.#comments = null;
+
+    this.#sortedFilms = null;
   }
 
   init(films, comments) {
@@ -73,18 +82,18 @@ export default class MainPresenter {
     render(this.#filmsView, this.#filmsListView);
 
     this.#renderFilms(0, FILMS_COUNT_ON_START);
-
-    if (this.#films.length > FILMS_COUNT_ON_START) {
-      this.#renderShowMoreButton();
-    }
+    this.#renderShowMoreButton();
   }
 
   #renderSort() {
     render(this.#container, this.#sortView);
+    this.#sortView.setSortTypeChangeHandler(this.#handleSortTypeChange);
   }
 
   #renderFilms(from, to) {
-    this.#films.slice(from, to).forEach((film) => {
+    this.#sortedFilms = getFilmsBySortType(this.#films, this.#currentSortType);
+
+    this.#sortedFilms.slice(from, to).forEach((film) => {
       const filmPresenter = new FilmPresenter(this.#filmsContainer);
       this.#filmsPresenters.set(film.id, filmPresenter);
       filmPresenter.init(
@@ -101,7 +110,10 @@ export default class MainPresenter {
   }
 
   #renderShowMoreButton() {
-    render(this.#filmsListView, this.#showMoreButtonView);
+    if (this.#films.length > FILMS_COUNT_ON_START) {
+      render(this.#filmsListView, this.#showMoreButtonView);
+    }
+
     this.#showMoreButtonView.setClickHandler(this.#handleShowMoreButtonClick);
   }
 
@@ -129,4 +141,20 @@ export default class MainPresenter {
   #handleViewChange = () => {
     this.#filmsPresenters.forEach((presenter) => presenter.chageViewToCard());
   };
+
+  #handleSortTypeChange = (currentSortType) => {
+    this.#currentSortType = currentSortType;
+
+    this.#clearFilms();
+    remove(this.#showMoreButtonView);
+
+    this.#renderedFilms = FILMS_COUNT_ON_START;
+    this.#renderFilms(0, FILMS_COUNT_ON_START);
+    this.#renderShowMoreButton();
+  };
+
+  #clearFilms() {
+    this.#filmsPresenters.forEach((presenter) => presenter.destroy());
+    this.#filmsPresenters.clear();
+  }
 }

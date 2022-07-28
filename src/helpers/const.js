@@ -20,3 +20,18 @@ export const RenderPosition = {
   BEFOREEND: 'beforeend',
   AFTEREND: 'afterend',
 };
+
+export const SortType = {
+  DEFAULT: {
+    title: `Sort by default`,
+    type: `DEFAULT`,
+  },
+  DATE: {
+    title: `Sort by date`,
+    type: `DATE`,
+  },
+  RATING: {
+    title: `Sort by rating`,
+    type: `RATING`,
+  },
+};

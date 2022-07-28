@@ -59,6 +59,14 @@ export default class FilmPresenter {
     }
   }
 
+  destroy() {
+    remove(this.#filmCardView);
+
+    if (this.#filmDetailsView) {
+      this.#handleFilmDetailsClose();
+    }
+  }
+
   chageViewToCard() {
     this.#handleFilmDetailsClose();
   }

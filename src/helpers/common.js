@@ -1,4 +1,6 @@
-import { UserRank } from './const';
+import dayjs from 'dayjs';
+
+import { SortType, UserRank } from './const';
 
 export const getRandomInt = (min = 0, max = 1) => {
   min = Math.ceil(min);
@@ -48,4 +50,23 @@ export const updateItem = (items, update) => {
   }
 
   return [...items.slice(0, index), update, ...items.slice(index + 1)];
+};
+
+export const getFilmsBySortType = (films, sortType) => {
+  const sortedFilms = [...films];
+
+  switch (sortType) {
+    case SortType.DEFAULT.type:
+      return sortedFilms;
+    case SortType.DATE.type:
+      return sortedFilms.sort((a, b) =>
+        dayjs(b.filmInfo.release.date).diff(a.filmInfo.release.date)
+      );
+    case SortType.RATING.type:
+      return sortedFilms.sort(
+        (a, b) => b.filmInfo.totalRating - a.filmInfo.totalRating
+      );
+    default:
+      return sortedFilms;
+  }
 };

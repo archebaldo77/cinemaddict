@@ -1,10 +1,8 @@
-import AbstractClassView from '../abstract-class-view/abstract-class-view';
+import AbstractSmartClassView from '../abstract-smart-class-view/abstract-smart-class-view';
 
 import { createSortTemplate } from './templates/create-sort-template';
 
-import { replace } from '../../helpers/render';
-
-export default class SortView extends AbstractClassView {
+export default class SortView extends AbstractSmartClassView {
   #currentSortType;
 
   constructor(currentSortType) {
@@ -27,23 +25,20 @@ export default class SortView extends AbstractClassView {
         return;
       }
 
+      if (this.#currentSortType === evt.target.dataset.sortType) {
+        return;
+      }
+
       this.#currentSortType = evt.target.dataset.sortType;
 
       cb(this.#currentSortType);
 
-      this.updateView();
+      this._updateView();
+      this._restoreHandlers();
     });
   }
 
-  updateView() {
-    const prevElement = this.element;
-    this.removeElement();
-    replace(this.element, prevElement);
-
-    this.#restoreListeners();
-  }
-
-  #restoreListeners() {
+  _restoreHandlers() {
     this.setSortTypeChangeHandler(this._callbacks.handleSortTypeChange);
   }
 }

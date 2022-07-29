@@ -1,10 +1,8 @@
-import AbstractClassView from '../abstract-class-view/abstract-class-view';
+import AbstractSmartClassView from '../abstract-smart-class-view/abstract-smart-class-view';
 
 import { createFilmDetailsTemplate } from './templates/create-film-details-template';
 
-import { replace } from '../../helpers/render';
-
-export default class FilmDetailsView extends AbstractClassView {
+export default class FilmDetailsView extends AbstractSmartClassView {
   #film;
   #comments;
 
@@ -52,14 +50,6 @@ export default class FilmDetailsView extends AbstractClassView {
       });
   }
 
-  updateView() {
-    const prevElement = this.element;
-    const scrollTop = this.element.scrollTop;
-    this.removeElement();
-    replace(this.element, prevElement);
-    this.element.scrollTop = scrollTop;
-  }
-
   #setEmotionClickHandler(cb) {
     this._callbacks.handleEmotionClick = cb;
 
@@ -77,11 +67,11 @@ export default class FilmDetailsView extends AbstractClassView {
   }
 
   #handleEmotionClick = () => {
-    this.updateView();
-    this.#restoreListeners();
+    this._updateView();
+    this._restoreHandlers();
   };
 
-  #restoreListeners() {
+  _restoreHandlers() {
     this.setCloseClickHandler(this._callbacks.handleCloseClick);
     this.setControlClickHandler(this._callbacks.handleControlClick);
     this.#setEmotionClickHandler(this._callbacks.handleEmotionClick);

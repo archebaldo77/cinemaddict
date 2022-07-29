@@ -5,7 +5,11 @@ import { createEmojiListTemplate } from './create-emoji-list-template';
 
 import { getFilmReleaseDate, getFilmDuration } from '../../../helpers/date';
 
-export const createFilmDetailsTemplate = (film, comments) => {
+export const createFilmDetailsTemplate = (
+  film,
+  comments,
+  state = { emotion: null, text: null }
+) => {
   const {
     filmInfo: {
       poster,
@@ -23,6 +27,8 @@ export const createFilmDetailsTemplate = (film, comments) => {
     },
     userDetails,
   } = film;
+
+  const { emotion } = state;
 
   return `
     <section class="film-details">
@@ -90,7 +96,13 @@ export const createFilmDetailsTemplate = (film, comments) => {
             <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">4</span></h3>
             ${createCommentsTemplate(comments)}
             <div class="film-details__new-comment">
-              <div class="film-details__add-emoji-label"></div>
+              <div class="film-details__add-emoji-label">
+                ${
+                  emotion !== null
+                    ? `<img src="images/emoji/${emotion}.png" width="55" height="55" alt="emoji-${emotion}">`
+                    : ``
+                }
+              </div>
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
